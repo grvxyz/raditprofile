@@ -1,103 +1,139 @@
-import Image from "next/image";
+'use client'
+
+import Image from "next/image"
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const SectionPill = ({ title, items }: { title: string, items: string[] }) => (
+    <section className="text-center fade-in-up">
+      <h2 className="text-2xl font-bold mb-3">{title}</h2>
+      <div className="flex flex-wrap justify-center gap-3">
+        {items.map((item, idx) => (
+          <span
+            key={idx}
+            className="bg-white text-gray-800 px-5 py-2 rounded-full text-sm font-semibold shadow scale-loop"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </section>
+  )
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+  const ProjectCard = ({
+    image,
+    title,
+    desc,
+  }: {
+    image: string
+    title: string
+    desc: string
+  }) => (
+    <div className="bg-black text-white rounded-xl p-5 transition-transform duration-300 transform hover:scale-[1.015] shadow-[0_0_15px_#ffffff33]">
+      <Image
+        src={image}
+        alt={title}
+        width={500}
+        height={300}
+        className="rounded-md mb-4"
+      />
+      <h3 className="text-xl font-bold">{title}</h3>
+      <p className="text-sm text-white/70">{desc}</p>
+    </div>
+  )
+
+  return (
+    <>
+      <main className="min-h-screen font-sans pt-28 px-8 space-y-12 text-white bg-black">
+        {/* Hero */}
+        <div className="text-center fade-in-up">
+          <Image
+            src="/Rads.jpg"
+            alt="Rads"
+            width={160}
+            height={160}
+            className="mx-auto rounded-full border-4 border-white shadow-2xl"
+          />
+          <h1 className="text-4xl md:text-5xl font-extrabold mt-4 drop-shadow-lg">
+            👋 Halo, Saya Raditya Naufal
+          </h1>
+          <p className="text-lg text-white/80 mt-1">Mahasiswa Sistem Informasi</p>
+          <p className="text-sm text-white/70 mt-1">IPK: 3.79 • Prambanan, Sleman</p>
+        </div>
+
+        {/* Tentang */}
+        <div className="w-full flex justify-center fade-in-up">
+          <p className="text-white/80 text-sm leading-relaxed max-w-2xl text-center">
+            Saya mahasiswa Sistem Informasi dengan minat pada web development, UI/UX, dan AI. Aktif mengembangkan aplikasi dan suka belajar teknologi baru.
+          </p>
+        </div>
+
+        {/* Skill */}
+        <SectionPill title="Bahasa Pemrograman" items={["PHP", "C++", "Kotlin", "HTML", "CSS", "JavaScript"]} />
+        <SectionPill title="Tools & Framework" items={["Tailwind CSS", "Laravel", "MySQL", "Figma", "VS Code", "Android Studio"]} />
+
+        {/* Proyek */}
+        <section className="fade-in-up w-full flex flex-col items-center">
+          <h2 className="text-2xl font-bold mb-6 text-center">Proyek Unggulan</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+            <ProjectCard image="/laundry.png" title="Aplikasi Laundry" desc="Sistem laundry berbasis Codeigniter dengan fitur laporan dan manajemen produk." />
+            <ProjectCard image="/tokoku.png" title="Aplikasi Toko Online" desc="Toko Online seperti Tokopedia." />
+          </div>
+        </section>
+
+        {/* GitHub */}
+        <section className="text-center fade-in-up">
+          <h2 className="text-2xl font-bold mb-3">Most Used</h2>
+          <img
+            src="https://github-readme-stats.vercel.app/api/top-langs/?username=grvxyz&layout=compact&theme=radical"
+            alt="Top Languages"
+            className="mx-auto rounded-lg shadow-lg"
+          />
+        </section>
+
+        {/* CTA */}
+        <div className="fade-in-up text-center mb-20">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="bg-white text-indigo-700 font-bold text-sm px-6 py-3 rounded-full shadow-xl hover:bg-indigo-600 hover:text-white transition-smooth scale-loop inline-block"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            🚀 Buat Web Saya
           </a>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="mt-32 bg-black text-white py-12 px-6 border-t border-white/20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-start text-center md:text-left">
+          {/* Kontak */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Contact</h3>
+            <ul className="space-y-1 text-sm text-white/80">
+              <li><a href="mailto:radityanaufal2005@gmail.com" className="hover:text-white transition-colors">Email</a></li>
+              <li><a href="https://wa.me/6281228450028" className="hover:text-white transition-colors">WhatsApp</a></li>
+              <li><a href="https://linkedin.com/in/radityanaufal" className="hover:text-white transition-colors">LinkedIn</a></li>
+              <li><a href="https://github.com/grvxyz" className="hover:text-white transition-colors">GitHub</a></li>
+            </ul>
+          </div>
+
+          {/* QR */}
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-4 text-center">QR Contact</h3>
+            <img
+              src="https://api.qrserver.com/v1/create-qr-code/?data=BEGIN:VCARD%0AVERSION:3.0%0AN:Naufal;Raditya%0AEMAIL:radityanaufal2005@gmail.com%0ATEL:+6281228450028%0AEND:VCARD&size=150x150"
+              alt="QR Code"
+              className="border-2 border-white rounded-lg w-[130px] h-[130px]"
+            />
+          </div>
+
+          {/* Copyright */}
+          <div className="text-sm text-white/60 text-center md:text-right">
+            <h3 className="text-xl font-semibold mb-4">Created By</h3>
+            <p>© 2025 Raditya Naufal</p>
+            <p>All Rights Reserved.</p>
+          </div>
+        </div>
       </footer>
-    </div>
-  );
+    </>
+  )
 }
