@@ -1,36 +1,53 @@
 @import "tailwindcss";
 
+/* ==== Root Variables ==== */
 :root {
-  --background: #ffffff;
+  --background: linear-gradient(270deg, #4c51bf, #6b46c1, #ed64a6, #2b6cb0, #d69e2e, #48bb78);
   --foreground: #171717;
   --font-sans: Arial, Helvetica, sans-serif;
   --font-mono: monospace;
+  --background-size: 1200% 1200%;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
+    --background: linear-gradient(270deg, #1a202c, #2d3748, #4a5568, #2b6cb0, #1a365d, #22543d);
     --foreground: #ededed;
   }
 }
 
+/* ==== Global Styles ==== */
 body {
   background: var(--background);
+  background-size: var(--background-size);
+  animation: gradientBG 20s ease infinite;
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
+/* ==== Keyframes ==== */
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
 @keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(40px); }
+  0%   { opacity: 0; transform: translateY(40px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes scaleLoop {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+
+/* ==== Utility Classes ==== */
 .fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
 }
@@ -38,22 +55,15 @@ body {
 .float {
   animation: float 3s ease-in-out infinite;
 }
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
 
 .scale-loop {
   animation: scaleLoop 2s ease-in-out infinite;
-}
-@keyframes scaleLoop {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
 }
 
 .transition-smooth {
   transition: all 0.3s ease-in-out;
 }
+
 .hover-grow:hover {
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
