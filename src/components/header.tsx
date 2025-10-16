@@ -31,16 +31,20 @@ export function SiteHeader({
 
   const handleNavClick = (item: { href: string }) => {
     posthog.capture("nav_clicked", { href: item.href });
+
+    // Scroll ke anchor jika href-nya dimulai dengan #
     if (item.href.startsWith("#")) {
       if (onNavigate) {
         onNavigate(item.href);
       } else {
         const element = document.querySelector(item.href);
         if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }
     }
+
+    // Tutup menu mobile setelah klik
     setMobileMenuOpen(false);
   };
 
@@ -53,20 +57,25 @@ export function SiteHeader({
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between h-16 relative">
         {/* Logo kiri */}
         <Link
-          className="text-2xl bg-clip-text flex items-center bg-gradient-to-br from-white from-30% to-white/40"
           href="/"
+          className="text-2xl font-bold tracking-tight bg-clip-text bg-gradient-to-br from-white via-white/90 to-white/50 text-transparent hover:opacity-90 transition-opacity"
         >
           Raditya Naufal
         </Link>
 
-        {/* Navigation tengah */}
-        <nav className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+        {/* Navigation tengah (Desktop) */}
+        <nav
+          className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2"
+          role="navigation"
+          aria-label="Main Navigation"
+        >
           {navigation.map((item) =>
             item.dropdown ? (
               <div className="relative" key={item.name}>
                 <button
-                  className="flex items-center gap-1 text-md font-medium text-white/70 hover:text-white transition-colors"
                   onClick={() => toggleDropdown(item.name)}
+                  className="flex items-center gap-1 text-md font-medium text-white/70 hover:text-white transition-colors"
+                  aria-expanded={openDropdown === item.name}
                 >
                   {item.name}
                   {openDropdown === item.name ? (
@@ -75,18 +84,20 @@ export function SiteHeader({
                     <ChevronDown className="w-4 h-4" />
                   )}
                 </button>
+
+                {/* Dropdown */}
                 <div
-                  className={`absolute left-0 mt-2 w-40 rounded-md bg-black border border-zinc-700 shadow-lg z-50 transition-all duration-200 ease-out transform ${
+                  className={`absolute left-0 mt-2 w-44 rounded-md bg-black/90 border border-zinc-700 shadow-lg transition-all duration-200 ease-out transform origin-top ${
                     openDropdown === item.name
-                      ? "opacity-100 scale-100"
-                      : "opacity-0 scale-95 pointer-events-none"
+                      ? "opacity-100 scale-100 visible"
+                      : "opacity-0 scale-95 invisible"
                   }`}
                 >
                   {item.dropdown.map((sub) => (
                     <Link
                       key={sub.name}
                       href={sub.href}
-                      className="block px-4 py-2 text-sm text-white/80 hover:bg-zinc-800"
+                      className="block px-4 py-2 text-sm text-white/80 hover:bg-zinc-800 rounded transition-colors"
                       onClick={() =>
                         posthog.capture("nav_clicked", { href: sub.href })
                       }
@@ -119,7 +130,7 @@ export function SiteHeader({
               >
                 {item.name === "What's New" ? (
                   <>
-                    {item.name} 🚀
+                    {item.name} <span className="animate-pulse">🚀</span>
                   </>
                 ) : (
                   item.name
@@ -132,8 +143,9 @@ export function SiteHeader({
         {/* Tombol Menu Mobile */}
         <button
           type="button"
-          className="md:hidden text-white inline-flex items-center justify-center"
+          className="md:hidden text-white inline-flex items-center justify-center p-2 hover:opacity-80"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -142,13 +154,13 @@ export function SiteHeader({
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-4 py-3 space-y-1 bg-black/80 backdrop-blur-xl border-t border-white/10">
+          <div className="px-4 py-3 space-y-1 bg-black/90 backdrop-blur-xl border-t border-white/10">
             {navigation.map((item) => (
-              <div key={item.name} className="py-2">
+              <div key={item.name} className="py-1">
                 {item.dropdown ? (
-                  <div className="space-y-1">
+                  <>
                     <button
-                      className="flex items-center justify-between w-full text-base font-medium text-white"
+                      className="flex items-center justify-between w-full text-base font-medium text-white hover:text-white/80 transition-colors"
                       onClick={() =>
                         setOpenDropdown((prev) =>
                           prev === item.name ? null : item.name
@@ -162,6 +174,7 @@ export function SiteHeader({
                         <ChevronDown className="w-4 h-4 text-white" />
                       )}
                     </button>
+
                     {openDropdown === item.name && (
                       <div className="pl-4 space-y-1 mt-1">
                         {item.dropdown.map((sub) => (
@@ -176,7 +189,7 @@ export function SiteHeader({
                         ))}
                       </div>
                     )}
-                  </div>
+                  </>
                 ) : item.href.startsWith("#") ? (
                   <a
                     href={item.href}
